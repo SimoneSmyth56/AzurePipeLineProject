@@ -94,15 +94,3 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: sampleapp
-
-    - name: Deploy to Server
-      env:
-        SERVER_HOST: ${{ secrets.SERVER_HOST }}
-        SERVER_USER: ${{ secrets.SERVER_USER }}
-        SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
-      run: |
-        scp -o StrictHostKeyChecking=no target/*.jar $SERVER_USER@$SERVER_HOST:/path/to/deploy
-        ssh $SERVER_USER@$SERVER_HOST << 'EOF'
-        # Commands to start the application on your server
-        java -jar /path/to/deploy/sampleapp.jar &
-        EOF
