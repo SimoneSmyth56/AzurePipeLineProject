@@ -25,6 +25,13 @@ jobs:
 
     - name: Build with Maven
       run: mvn clean package --batch-mode
+
+    - name: Sending the result Telegram  notification
+      run: |
+        curl --get \
+          --data-urlencode 'chat_id=${{vars.TELEGRAM_DEPLOY_NOTICE_RECIPIENT_ID}}' \
+          --data-urlencode 'text=✅SUCCESS! ${{github.event.head_commit.message}} (${{github.event.head_commit.id}})' \
+          https://api.telegram.org/bot${{secrets.TELEGRAM_DEPLOY_NOTIFIER_BOT_TOKEN}}/sendMessage
       
   test:
     runs-on: ubuntu-latest
