@@ -33,14 +33,14 @@ jobs:
 
     - name: Send notification on success
       if: success()
-      run: python3 PipeLineProject/send_email.py "Build Success" "The build succeeded!"
+      run: python3 send_email.py "Build Success" "The build succeeded!"
       env:
         SMTP_USER: ${{ secrets.SMTP_USER }}
         SMTP_PASS: ${{ secrets.SMTP_PASS }}
 
     - name: Send notification on failure
       if: failure()
-      run: python3 PipeLineProject/send_email.py "Build Failure" "The build failed. Please check the logs for more details."
+      run: python3 send_email.py "Build Failure" "The build failed. Please check the logs for more details."
       env:
         SMTP_USER: ${{ secrets.SMTP_USER }}
         SMTP_PASS: ${{ secrets.SMTP_PASS }}
