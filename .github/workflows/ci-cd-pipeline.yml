@@ -39,15 +39,16 @@ jobs:
         echo "password ${{ secrets.SMTP_PASS }}" >> ~/.msmtprc
         echo "tls on" >> ~/.msmtprc
         echo "tls_trust_file /etc/ssl/certs/ca-certificates.crt" >> ~/.msmtprc
+        echo "from simone.smyth56@gmail.com" >> ~/.msmtprc
         chmod 600 ~/.msmtprc
 
     - name: Send notification on success
       if: success()
-      run: echo -e "Subject:Build Success\n\nThe build succeeded!" | msmtp recipient-email@example.com
+      run: echo -e "Subject:Build Success\n\nThe build succeeded!" | msmtp simone.smyth56@gmail.com
 
     - name: Send notification on failure
       if: failure()
-      run: echo -e "Subject:Build Failure\n\nThe build failed. Please check the logs for more details." | msmtp recipient-email@example.com
+      run: echo -e "Subject:Build Failure\n\nThe build failed. Please check the logs for more details." | msmtp simone.smyth56@gmail.com
 
       
   test:
