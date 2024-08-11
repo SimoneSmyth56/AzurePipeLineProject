@@ -20,18 +20,21 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '17'
-        distribution: 'temurin' # Use 'temurin' for the latest AdoptOpenJDK
+        distribution: 'temurin' 
         java-package: 'jdk'
 
     - name: Build with Maven
       run: mvn clean package --batch-mode
 
-    - name: Sending the result Telegram  notification
+    - name: Send notification on success
+      if: success()
       run: |
-        curl --get \
-          --data-urlencode 'chat_id=${{vars.TELEGRAM_DEPLOY_NOTICE_RECIPIENT_ID}}' \
-          --data-urlencode 'text=✅SUCCESS! ${{github.event.head_commit.message}} (${{github.event.head_commit.id}})' \
-          https://api.telegram.org/bot${{secrets.TELEGRAM_DEPLOY_NOTIFIER_BOT_TOKEN}}/sendMessage
+        echo "Subject: Build Success\n\nThe build succeeded!" | sendmail -S smtp.gmail.com:587 -au${{ secrets.SMTP_USER }} -ap${{ secrets.SMTP_PASS }} simone.smyth56@gmail.com
+
+    - name: Send notification on failure
+      if: failure()
+      run: |
+        echo "Subject: Build Failure\n\nThe build failed. Please check the logs for more details." | sendmail -S smtp.gmail.com:587 -au${{ secrets.SMTP_USER }} -ap${{ secrets.SMTP_PASS }} simone.smyth56@gmail.com
       
   test:
     runs-on: ubuntu-latest
